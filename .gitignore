@@ -1,0 +1,17 @@
+.node_repl_history
+.bash_history
+.cache
+.yarnrc
+yarn.lock
+.config
+.npm
+.yarn
+.docker/postgres/dbdata
+.docker/pgadmin/dbdata
+.gitconfig
+.vs-liveshare-keychain
+.ssh
+.vscode-server
+.local
+.gnupg
+node_modules

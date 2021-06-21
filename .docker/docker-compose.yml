@@ -1,0 +1,41 @@
+version: "3.5"
+
+services:
+
+  api-vcred:
+    build: ./app
+    container_name: api-vcred
+    # ports:
+    #   - "3333:3333"
+    volumes:
+      - ../.:/home/node
+    tty: true
+    entrypoint: dockerize -wait tcp://db-api-vcred:5432 -timeout 40s .docker/app/entrypoint.sh
+    depends_on:
+      - db-api-vcred
+  
+  pgadmin-vcred:
+    build: ./pgadmin
+    container_name: pgadmin-vcred
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@email.com"
+      PGADMIN_DEFAULT_PASSWORD: "root"
+    # volumes: 
+    #   - ./pgadmin/dbdata:/var/lib/pgadmin
+    ports:
+      - "8080:80"
+    depends_on:
+      - db-api-vcred
+
+  db-api-vcred:
+    build: ./postgres
+    container_name: db-api-vcred
+    restart: always
+    tty: true
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/dbdata:/var/lib/postgresql/data
+      - ./postgres/entrypoint:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_PASSWORD=root
